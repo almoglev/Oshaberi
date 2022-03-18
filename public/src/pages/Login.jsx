@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import axios from 'axios'
 import { loginRoute } from '../utils/ApiRoutes'
+import ToastOptions from '../utils/ToastOptions'
 
 function Login() {
   const navigate = useNavigate()
@@ -14,14 +15,6 @@ function Login() {
         email: "",
         password: "",
       })
-
-    const toastOptions = {
-        position: "top-right",
-        autoClose: 3000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: 'dark'
-    }
 
     useEffect(() => {
       if (localStorage.getItem('oshaberi-user')) {
@@ -39,7 +32,7 @@ function Login() {
             })
 
             if (data.status === false) {
-              toast.error(data.msg, toastOptions)
+              toast.error(data.msg, {ToastOptions})
             }
 
             if (data.status === true) {
@@ -53,7 +46,7 @@ function Login() {
         const {password, email} = values
 
         if (email === "" || email.length === 0 || password === "" || password.length === 0) {
-            toast.error("Email & Password are required", toastOptions)
+            toast.error("Email & Password are required", {ToastOptions})
             return false
         } 
 

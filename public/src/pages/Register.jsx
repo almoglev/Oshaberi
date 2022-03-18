@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import axios from 'axios'
 import { registerRoute } from '../utils/ApiRoutes'
+import ToastOptions from '../utils/ToastOptions'
 
 function Register() {
   const navigate = useNavigate()
@@ -16,14 +17,6 @@ function Register() {
         password: "",
         confirmPassword: "",
       })
-
-    const toastOptions = {
-        position: "top-right",
-        autoClose: 3000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: 'dark'
-    }
 
     useEffect(() => {
       if (localStorage.getItem('oshaberi-user')) {
@@ -40,7 +33,7 @@ function Register() {
             })
 
             if (data.status === false) {
-              toast.error(data.msg, toastOptions)
+              toast.error(data.msg, {ToastOptions})
             }
 
             if (data.status === true) {
@@ -54,17 +47,17 @@ function Register() {
         const {password, confirmPassword, username, email} = values
 
         if (username.length < 3) {
-            toast.error("Username must be at least 3 characters", toastOptions)
+            toast.error("Username must be at least 3 characters", {ToastOptions})
             return false
         } else if (email === "") {
-            toast.error("Email is required", toastOptions)
+            toast.error("Email is required", {ToastOptions})
             return false
         }
         else if (password !== confirmPassword) {
-            toast.error("Passwords don't match", toastOptions)
+            toast.error("Passwords don't match", {ToastOptions})
             return false
         } else if (password.length < 6) {
-            toast.error("Password must be at least 6 characters", toastOptions)
+            toast.error("Password must be at least 6 characters", {ToastOptions})
             return false
         }
 
@@ -77,25 +70,25 @@ function Register() {
 
   return (
     <>
-        <FormContainer>
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <div className="brand">
-                    <img src={Logo} alt="logo" />
-                    <h1>oshaberi</h1>
-                </div>
+      <FormContainer>
+          <form onSubmit={(e) => handleSubmit(e)}>
+              <div className="brand">
+                  <img src={Logo} alt="logo" />
+                  <h1>oshaberi</h1>
+              </div>
 
-                <input type="text" placeholder='Username' name="username" onChange={(e) => handleChange(e)}/>            
-                <input type="email" placeholder='Email' name="email" onChange={(e) => handleChange(e)}/>            
-                <input type="password" placeholder='Password' name="password" onChange={(e) => handleChange(e)}/>            
-                <input type="password" placeholder='Confirm Password' name="confirmPassword" onChange={(e) => handleChange(e)}/>            
+              <input type="text" placeholder='Username' name="username" onChange={(e) => handleChange(e)}/>            
+              <input type="email" placeholder='Email' name="email" onChange={(e) => handleChange(e)}/>            
+              <input type="password" placeholder='Password' name="password" onChange={(e) => handleChange(e)}/>            
+              <input type="password" placeholder='Confirm Password' name="confirmPassword" onChange={(e) => handleChange(e)}/>            
 
-                <button type="submit">Register</button>
-                <span>
-                    Already have an account? <Link to="/login"> Login</Link>
-                </span>
-            </form>
-        </FormContainer>
-        <ToastContainer />
+              <button type="submit">Register</button>
+              <span>
+                  Already have an account? <Link to="/login"> Login</Link>
+              </span>
+          </form>
+      </FormContainer>
+      <ToastContainer />
     </>
   )
 }
