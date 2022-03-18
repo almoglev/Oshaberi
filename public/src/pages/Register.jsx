@@ -25,6 +25,12 @@ function Register() {
         theme: 'dark'
     }
 
+    useEffect(() => {
+      if (localStorage.getItem('oshaberi-user')) {
+        navigate('/')
+      }
+    }, [navigate])
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (handleValidation()) {
@@ -34,12 +40,11 @@ function Register() {
             })
 
             if (data.status === false) {
-              toast.error("Sorry, there was a problem with your registration, Please try again", toastOptions)
+              toast.error(data.msg, toastOptions)
             }
 
             if (data.status === true) {
               localStorage.setItem('oshaberi-user', JSON.stringify(data.user))
-              toast.success(`Welcome ${username}!`, toastOptions)
               navigate("/")
             }
         }
