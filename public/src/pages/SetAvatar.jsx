@@ -9,6 +9,9 @@ import { setAvatarRoute } from '../utils/ApiRoutes'
 import ToastOptions from '../utils/ToastOptions'
 import { Buffer } from 'buffer'
 
+const SELECT_AVATAR_ERR = "Please select an avatar"
+const SET_AVATAR_ERROR = "Cannot set avatar, please try again"
+
 function SetAvatar() {
     // Free avatar generator api
     const api = 'https://api.multiavatar.com/45678945'
@@ -41,7 +44,7 @@ function SetAvatar() {
     const setProfilePicture = async () => {
         try {
             if (selectedAvatar === undefined) {
-                toast.error("Please select an avatar", ToastOptions)
+                toast.error(SELECT_AVATAR_ERR, ToastOptions)
             } else {
                 const user = await JSON.parse(localStorage.getItem('oshaberi-user'))
                 const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
@@ -54,7 +57,7 @@ function SetAvatar() {
                 navigate('/')
             }
         } catch (err) {
-            toast.error("Cannot set avatar, please try again", {ToastOptions})
+            toast.error(SET_AVATAR_ERROR, {ToastOptions})
         }
     }
 

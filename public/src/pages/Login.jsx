@@ -8,6 +8,8 @@ import axios from 'axios'
 import { loginRoute } from '../utils/ApiRoutes'
 import ToastOptions from '../utils/ToastOptions'
 
+const REQUIRED_CREDENTIALS_ERR = "Email & Password are required"
+
 function Login() {
   const navigate = useNavigate()
 
@@ -46,7 +48,7 @@ function Login() {
         const {password, email} = values
 
         if (email === "" || email.length === 0 || password === "" || password.length === 0) {
-            toast.error("Email & Password are required", {ToastOptions})
+            toast.error(REQUIRED_CREDENTIALS_ERR, {ToastOptions})
             return false
         } 
 

@@ -8,6 +8,11 @@ import axios from 'axios'
 import { registerRoute } from '../utils/ApiRoutes'
 import ToastOptions from '../utils/ToastOptions'
 
+const USERNAME_LENGTH_ERR = "Username must be at least 3 characters"
+const REQUIRED_EMAIL_ERR = "Email is required"
+const PASSWORDS_MATCH_ERR = "Passwords don't match"
+const PASSWORD_LENGTH_ERR = "Password must be at least 6 characters"
+
 function Register() {
   const navigate = useNavigate()
 
@@ -47,17 +52,17 @@ function Register() {
         const {password, confirmPassword, username, email} = values
 
         if (username.length < 3) {
-            toast.error("Username must be at least 3 characters", {ToastOptions})
+            toast.error(USERNAME_LENGTH_ERR, {ToastOptions})
             return false
         } else if (email === "") {
-            toast.error("Email is required", {ToastOptions})
+            toast.error(REQUIRED_EMAIL_ERR, {ToastOptions})
             return false
         }
         else if (password !== confirmPassword) {
-            toast.error("Passwords don't match", {ToastOptions})
+            toast.error(PASSWORDS_MATCH_ERR, {ToastOptions})
             return false
         } else if (password.length < 6) {
-            toast.error("Password must be at least 6 characters", {ToastOptions})
+            toast.error(PASSWORD_LENGTH_ERR, {ToastOptions})
             return false
         }
 
