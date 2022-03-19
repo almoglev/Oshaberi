@@ -66,7 +66,7 @@ module.exports.setAvatar = async (req, res, next) => {
             avatarImage
         })
 
-        return res.json({isSet:userData.isAvatarImageSet, image: userData.avatarImage})
+        return res.json({isSet:userData.isAvatarImageSet, image: avatarImage})
     } catch (err) {
         next(err)
     }

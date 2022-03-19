@@ -2,27 +2,21 @@ import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Logo from '../assets/logo.svg'
 
-function Contacts({ contacts, currentUser }) {
-
-  console.log("contacts: ", contacts)
-  console.log("current user: ", currentUser)
-
+function Contacts({ contacts, currentUser, changeChat }) {
     const [currentUsername, setCurrentUsername] = useState(undefined)
     const [currentUserImage, setCurrentUserImage] = useState(undefined)
     const [currentChat, setCurrentChat] = useState(undefined)
 
     useEffect(() => {
-      console.log("contacts: ", contacts)
-      console.log("current user: ", currentUser)
-
         if (currentUser) {
             setCurrentUserImage(currentUser.avatarImage)
             setCurrentUsername(currentUser.username)
         }
     }, [currentUser, contacts])
 
-    const changeCurrentChat = (index, contact) => {
-
+    const changeCurrentChat = (i, contact) => {
+      setCurrentChat(i)
+      changeChat(contact)
     }
     
 
@@ -38,8 +32,8 @@ function Contacts({ contacts, currentUser }) {
                     </div>
                     <div className="contacts">
                         {
-                            contacts.map((contact, i) => (
-                                <div className={`contact ${i === currentChat ? "selected" : ""}`} key={i}>
+                            contacts && (contacts.map((contact, i) => (
+                                <div className={`contact ${i === currentChat ? "selected" : ""}`} key={i} onClick={() => changeCurrentChat(i, contact)}>
                                     <div className="avatar">
                                         <img src={`data:image/svg+xml;base64,${contact.avatarImage}`} alt="avatar"/>
                                     </div>
@@ -47,7 +41,7 @@ function Contacts({ contacts, currentUser }) {
                                         <h3>{contact.username}</h3>
                                     </div>
                                 </div>
-                            ))
+                            )))
                         }
                     </div>
                     <div className="current-user">

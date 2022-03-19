@@ -52,7 +52,7 @@ function SetAvatar() {
                 })
 
                 user.isAvatarImageSet = true
-                user.avatarImage = data.inage
+                user.avatarImage = data.image
                 localStorage.setItem('oshaberi-user', JSON.stringify(user))
                 navigate('/')
             }
