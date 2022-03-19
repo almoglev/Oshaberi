@@ -24,7 +24,7 @@ function Register() {
       })
 
     useEffect(() => {
-      if (localStorage.getItem('oshaberi-user')) {
+      if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
         navigate('/')
       }
     }, [navigate])
@@ -42,7 +42,7 @@ function Register() {
             }
 
             if (data.status === true) {
-              localStorage.setItem('oshaberi-user', JSON.stringify(data.user))
+              localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(data.user))
               navigate("/")
             }
         }

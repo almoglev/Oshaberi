@@ -101,7 +101,7 @@ const Container = styled.div`
       display: flex;
       gap: 1rem;
       align-items: center;
-      transition: 0.5s ease-in-out;
+      transition: 0.2s ease-in-out;
 
       &:hover {
         //background-color: #4e0eff;

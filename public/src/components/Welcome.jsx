@@ -4,14 +4,13 @@ import Robot from '../assets/robot.gif'
 
 function Welcome({ currentUser }) {
   return (
-        currentUser ? (
-            <Container>
-                <img src={Robot} alt="Robot" />
-                <h1>Welcome, <span>{currentUser.username}!</span></h1>
-                <h3>Please select a contact to start chatting</h3>
-            </Container>
-        ) : <></>
-        
+    currentUser ? (
+        <Container>
+            <img src={Robot} alt="Robot" />
+            <h1>Welcome, <span>{currentUser.username}!</span></h1>
+            <h3>Please select a contact to start chatting</h3>
+        </Container>
+    ) : <></>   
   )
 }
 

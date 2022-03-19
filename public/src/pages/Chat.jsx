@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { allUsersRoute } from '../utils/ApiRoutes'
 import Contacts from '../components/Contacts'
 import Welcome from '../components/Welcome'
+import ChatContainer from '../components/ChatContainer'
 
 function Chat() {
   const [contacts, setContacts] = useState([])
@@ -14,7 +15,7 @@ function Chat() {
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      const localStorageUser = localStorage.getItem('oshaberi-user')      
+      const localStorageUser = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)      
       if (!localStorageUser) {
         navigate('/login')
       } else {
@@ -51,7 +52,11 @@ function Chat() {
     <Container>
       <div className='container'>
         <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange}/>
-        <Welcome currentUser={currentUser} />
+        {
+          currentChat === undefined ?
+          <Welcome currentUser={currentUser} /> :
+          <ChatContainer currentChat={currentChat} />
+        }
       </div>
     </Container>
   )

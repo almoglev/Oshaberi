@@ -18,27 +18,36 @@ function SetAvatar() {
     const navigate = useNavigate()
     const [avatars, setAvatars] = useState([])
     const [selectedAvatar, setSelectedAvatar] = useState(undefined)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        if (!localStorage.getItem('oshaberi-user')) {
+      const check = async () => {
+        if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
             navigate('/login')
+        } else {
+          const user = await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+          if(user && user.isAvatarImageSet) {
+            navigate('/')
+          }
         }
-      }, [navigate])
+      }
+      check()
+    }, [navigate])
     
     useEffect(() => {
         const fetchingAvatars = async () => {
-            const data = []
-            for (let i = 0; i < 4; i++) {
-                const image = await axios.get(`${api}/${Math.round(Math.random() * 1000)}`)
-                const buffer = new Buffer(image.data)
-                data.push(buffer.toString("base64"))
-            }
-            setAvatars(data)
-            setIsLoading(false)
-        }
+          setIsLoading(true)
+          const data = []
+          for (let i = 0; i < 4; i++) {
+              const image = await axios.get(`${api}/${Math.round(Math.random() * 1000)}`)
+              const buffer = new Buffer(image.data)
+              data.push(buffer.toString("base64"))
+          }
+          setAvatars(data)
+          setIsLoading(false)
+      }
 
-        fetchingAvatars()
+      fetchingAvatars()
     }, [])
 
     const setProfilePicture = async () => {
@@ -46,14 +55,14 @@ function SetAvatar() {
             if (selectedAvatar === undefined) {
                 toast.error(SELECT_AVATAR_ERR, ToastOptions)
             } else {
-                const user = await JSON.parse(localStorage.getItem('oshaberi-user'))
+                const user = await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
                 const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
                     image: avatars[selectedAvatar]
                 })
 
                 user.isAvatarImageSet = true
                 user.avatarImage = data.image
-                localStorage.setItem('oshaberi-user', JSON.stringify(user))
+                localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(user))
                 navigate('/')
             }
         } catch (err) {
@@ -79,11 +88,11 @@ function SetAvatar() {
 
                     <div className="avatars">
                         {
-                            avatars.map((avatar, i) => (
+                            avatars && (avatars.map((avatar, i) => (
                                 <div key={i} className= {`avatar ${selectedAvatar === i ? "selected" : ""}`}>
                                     <img src={`data:image/svg+xml;base64,${avatar}`} alt="avatar" onClick={()=>setSelectedAvatar(i)}/>
                                 </div>
-                            ))
+                            )))
                         }
                     </div>
                 </div>
