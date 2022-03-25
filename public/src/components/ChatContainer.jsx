@@ -1,21 +1,26 @@
-import { useEffect, useState} from 'react'
+import { useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
-import ChatInput from './ChatInput';
-import Logout from './Logout';
-import Messages from './Messages';
-import axios from 'axios';
+import ChatInput from './ChatInput'
+import Logout from './Logout'
+import axios from 'axios'
 import { getAllMessagesRoute, sendMessageRoute } from "../utils/ApiRoutes"
+import {v4 as uuidv4} from "uuid"
 
-function ChatContainer({ currentChat, currentUser }) {
+function ChatContainer({ currentChat, currentUser, socket }) {
     const [messages, setMessages] = useState([])
+    const [arrivalMessage, setArrivalMessage] = useState(null)
+    const scrollRef = useRef()
 
     useEffect(() => {
       const func = async () => {
-        const response = await axios.post(getAllMessagesRoute, {
-            from: currentUser._id,
-            to: currentChat._id,
-        })
-        setMessages(response.data)
+
+        if(currentChat) {
+          const response = await axios.post(getAllMessagesRoute, {
+              from: currentUser._id,
+              to: currentChat._id,
+          })
+          setMessages(response.data)
+        }
       }
       func()
     }, [currentChat])
@@ -27,7 +32,32 @@ function ChatContainer({ currentChat, currentUser }) {
             to: currentChat._id,
             message: msg
         })
+        socket.current.emit("send-msg", {
+          to: currentChat._id,
+          from: currentUser._id,
+          message: msg
+        })
+
+        const msgs = [...messages]
+        msgs.push({ fromSelf: true, message: msg })
+        setMessages(msgs)
     }
+
+    useEffect(()=> {
+      if (socket.current) {
+        socket.current.on("msg-receive", (msg) => {
+          setArrivalMessage({ fromSelf: false, message: msg})
+        })
+      }
+    }, [])
+
+    useEffect(() => {
+      arrivalMessage && setMessages((prev)=>[...prev, arrivalMessage])
+    }, [arrivalMessage])
+
+    useEffect(() => {
+      scrollRef.current?.scrollIntoView({behvaiour:"smooth"})
+    }, [messages])
 
     return (
       <>
@@ -47,8 +77,8 @@ function ChatContainer({ currentChat, currentUser }) {
                 </div>
                 <div className="chat-messages">
                     {
-                        messages && ( messages.map((message,i) => (
-                            <div key={i}>
+                        messages && ( messages.map((message) => (
+                            <div key={uuidv4()} ref={scrollRef}>
                                 <div className={`message ${message.fromSelf ? "sent":"received"}`}>
                                     <div className="content">
                                         <p>
